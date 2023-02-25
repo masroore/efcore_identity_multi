@@ -30,12 +30,12 @@ public static class ModelBuilderExtensions
                 var s = indexKey.Name;
                 if (string.IsNullOrEmpty(s))
                 {
-                    s = string.Join('_', new List<string>
-                    {
+                    s = string.Join(
+                        '_',
                         indexKey.IsUnique ? "AK" : "IX",
                         indexKey.DeclaringEntityType.Name.Split('.').Last().Pluralize(),
                         indexKey.Properties.First().GetColumnName()
-                    });
+                    );
                 }
 
                 indexKey.SetDatabaseName(ConvertKeyToSnake(s));
