@@ -1,37 +1,18 @@
+using System.Configuration;
 using asp_identity.Data;
 using asp_identity.Models;
 using Microsoft.EntityFrameworkCore;
+using static asp_identity.Data.Providers;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 // Add services to the container.
-
-var provider = builder.Configuration.GetValue<string>("DefaultDbProvider").ToLowerInvariant();
-
-switch (provider)
-{
-    case "mysql":
-        builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseMySQL(builder.Configuration.GetConnectionString(provider)!));
-        break;
-    case "pgsql":
-        builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseNpgsql(builder.Configuration.GetConnectionString(provider)!));
-        break;
-    case "mssql":
-        builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(builder.Configuration.GetConnectionString(provider)!));
-        break;
-    case "sqlite":
-        builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlite(builder.Configuration.GetConnectionString(provider)!));
-        break;
-}
-
+builder.AddDatabaseProvider();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddIdentity<User, Role>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+    .AddEntityFrameworkStores<AppDbContext>();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
