@@ -1,14 +1,11 @@
-using System.Configuration;
 using asp_identity.Data;
 using asp_identity.Models;
-using Microsoft.EntityFrameworkCore;
-using static asp_identity.Data.Providers;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 // Add services to the container.
-builder.AddDatabaseProvider();
+builder.AddDatabaseProvider<AppDbContext>();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddIdentity<User, Role>(options => options.SignIn.RequireConfirmedAccount = true)
